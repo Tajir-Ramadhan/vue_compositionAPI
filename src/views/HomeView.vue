@@ -5,11 +5,13 @@
    <p>serch term - {{ search }}</p>
 
    <div v-for="name in matchingNames" :key="name"> {{ name }}</div>
+
+   <button @click="handleClick">stop watching</button>
   </div>
 </template>
 
 <script>
-import { ref, reactive,computed } from 'vue'
+import { ref, reactive,computed, watch, watchEffect } from 'vue'
 
 // @ is an alias to /src
 export default {
@@ -24,7 +26,18 @@ export default {
       }
     )
 
-    return { names, search, matchingNames }
+    const stopWatch = watch(search, () => {console.log('Watch function fired')})
+
+    const stopEfect = watchEffect( () => {
+      console.log('watch Efect function fired!', search.value)
+    })
+
+    const handleClick = () => {
+      stopWatch()
+      stopEfect()
+    }
+
+    return { names, search, matchingNames, handleClick }
   }
 }
 </script>
